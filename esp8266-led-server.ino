@@ -9,7 +9,7 @@
 
 #ifndef STASSID
 #define STSSID "UPC3068195"
-#define STAPSK "3Jc5jNvvmhua"
+#define STAPSK ""
 #endif
 
 enum State {

@@ -11,7 +11,7 @@
 
 #ifndef STASSID
 #define STSSID "Dom_72av2"
-#define STAPSK "505932977"
+#define STAPSK ""
 #endif
 
 const char* ssid = STSSID;
