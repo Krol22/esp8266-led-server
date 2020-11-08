@@ -1,0 +1,19 @@
+{
+  "name": "visualization-music",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nodegui/nodegui": "^0.26.0",
+    "drawille": "^1.1.1",
+    "fourier-transform": "^1.1.2",
+    "naudiodon": "^2.2.4",
+    "node-core-audio": "github:kemphack/node-core-audio"
+  }
+}

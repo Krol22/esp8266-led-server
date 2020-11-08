@@ -22,10 +22,11 @@ enum State {
 };
 
 enum Animation {
-  EMPTY,
+  EMPTY, // placeholder for 0 value
   NONE,
   FLAME,
   GLOW,
+  KIT,
 };
 
 const char* ssid = STSSID;
@@ -45,6 +46,9 @@ int target_brightness = 0;
 float glow_brightness = 0;
 int glow_difference = 35;
 int glow_direction = 1;
+
+float kit_direction = 1;
+float kit_counter = 11;
 
 int brightness_sign = 0;
 int brightness = 50;
@@ -133,8 +137,8 @@ void handleAnimation() {
     int animation_number = atoi(server.arg("animation").c_str());
 
     // atoi returns 0 when "0" or letter -,-
-    if (animation_number == '\0' || animation_number < 1 || animation_number > 3) {
-      server.send(422, "text-aplain", "please choose number between 1 - 3");
+    if (animation_number == '\0' || animation_number < 1 || animation_number > 4) {
+      server.send(422, "text-aplain", "please choose number between 1 - 4");
       return;
     }
 
@@ -158,6 +162,8 @@ void animateStripe() {
     }
 
     switch(animation) {
+      case Animation::FLAME:
+        break;
       case Animation::GLOW:
         glow_brightness = brightness;
         break;
@@ -180,6 +186,48 @@ void animateStripe() {
       glow_brightness += (glow_direction * (0.1f));
 
       strip.setBrightness(glow_brightness);
+      break;
+    case Animation::KIT:
+      if (kit_counter < 10 || kit_counter > LED_COUNT - 10) {
+        kit_direction = -kit_direction;
+      }
+
+      kit_counter += (kit_direction / 3);
+      
+      for (int i = 0; i < LED_COUNT; i++) {
+        strip.setPixelColor(i, strip.Color(0, 0, 0));
+      }
+
+      for (int i = 1; i < 10; i++) {
+        uint8_t color[4];
+
+        *(uint32_t *)color = current_color;
+
+        int blue = color[0]; 
+        int color_change = color[0] / (10 - i);
+        if (color[0] > color[0] - color_change) {
+          blue = color[0] - color_change;
+        }
+
+        int green = color[1]; 
+        color_change = color[1] / (10 - i);
+        if (color[1] > color[1] - color_change) {
+          green = color[1] - color[1] / (10 - i);
+        }
+
+        int red = color[2]; 
+        color_change = color[2] / (10 - i);
+        if (color[2] > color[2] - color_change) {
+          red = color[2] - color[2] / (10 - i);
+        }
+
+        strip.setPixelColor(floor(kit_counter) - i, strip.Color(red, green, blue));  
+        strip.setPixelColor(floor(kit_counter) + i, strip.Color(red, green, blue));  
+      }
+
+      strip.setPixelColor(floor(kit_counter), current_color);
+      strip.show();
+
       break;
   } 
 }
